@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+
+    <h2>Que me pongo?</h2>
+
+    <ul id="lista" class="list-group">
+
+    </ul>
+</head>
+<body>
+<h1>Hello, world!</h1>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+
+    // $.get( "ajax/test.html", function( data ) {
+    //     $( ".result" ).html( data );
+    //     alert( "Load was performed." );
+    // });
+
+    $(document).ready(function() {
+
+        var proxy = 'https://cors-anywhere.herokuapp.com/';
+        var apiLinkDS = "https://api.darksky.net/forecast/5e3670796b419f9eba478cd997506bd7/-29.7167,-57.0833?lang=es&units=si";
+
+        $.ajax({
+            url: proxy + apiLinkDS,
+            success:function(response) {
+
+                var respuesta = {};
+                respuesta.paraguas = false;
+
+                console.log(response);
+                console.log('Estado actual: ' + response.currently.summary);
+                console.log('icon: ' + response.currently.icon);
+                console.log('intensidad lluvia: ' + response.currently.precipIntensity);
+                console.log('intensidad maxima lluvia: ' + response.currently.precipIntensityMax);
+                console.log('chance de lluvia: ' + response.currently.precipProbability);
+                console.log('temp: ' + response.currently.temperature);
+                console.log('sens termica: ' + response.currently.apparentTemperature);
+                console.log('vel viento: ' + response.currently.windSpeed);
+                console.log('rafaga viento: ' + response.currently.windGust);
+                console.log('Nubosidad: ' + response.currently.cloudCover);
+
+                var porHora = response.hourly.data;
+                var cantPorHora = porHora.length;
+
+                for (i = 0; i < cantPorHora; i++) {
+                    var date = new Date(porHora[i].time *1000);
+                    var day = date.getDate();
+                    var month = date.getMonth() + 1;
+                    var hours = date.getHours();
+                    var minutes = "0" + date.getMinutes();
+                    var seconds = "0" + date.getSeconds();
+                    var formattedTime = day + '/' + month + ' ' + hours + ':' + minutes.substr(-2);
+                    // console.log( formattedTime );
+
+                    var recomendacion = formattedTime + ' ';
+
+                    switch (porHora[i].icon) {
+
+                        case 'clear-day':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'clear-night':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'rain':
+                            respuesta.paraguas = true;
+                            break;
+                        case 'snow':
+                            respuesta.paraguas = true;
+                            break;
+                        case 'sleet': //aguanieve
+                            respuesta.paraguas = true;
+                            break;
+                        case 'wind':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'fog':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'cloudy':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'partly-cloudy-day':
+                            respuesta.paraguas = false;
+                            break;
+                        case 'partly-cloudy-night':
+                            respuesta.paraguas = false;
+                            break;
+                        default:
+                            //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
+                            break;
+                    }
+
+                    if (porHora[i].temperature <= 20) {
+                        respuesta.remera = true;
+                        respuesta.campera = true;
+                    } else if (porHora[i].temperature > 20 && porHora[i].temperature < 28) {
+                        respuesta.remera = true;
+                        respuesta.campera = false;
+                    } else if (porHora[i].temperature >= 28) {
+                        respuesta.remera = true;
+                    }
+
+
+                    if (respuesta.paraguas) {
+                        recomendacion += "<img src='img/umbrella.png' height='50px'></img>";
+                    }
+                    if (respuesta.campera) {
+                        recomendacion += "<img src='img/jacket.png' height='50px'></img>";
+                    } else if (respuesta.remera) {
+                        recomendacion += "<img src='img/tshirt.png' height='50px'></img>";
+                    }
+
+                    recomendacion += ' ' + Math.round(porHora[i].temperature) + "°";
+
+                    $('#lista').append("<li class='list-group-item'>"+ recomendacion +"</li>")
+                }
+
+            }
+        });
+
+    });
+
+    // $.ajax({
+    //     url: 'https://api.darksky.net/forecast/5e3670796b419f9eba478cd997506bd7/-29.7167,-57.0833?lang=es',
+        // success: function(response) {
+        //     console.log(response);
+        // },
+    // });
+
+</script>
+</body>
+</html>
