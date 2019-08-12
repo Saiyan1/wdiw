@@ -17,18 +17,28 @@
 <body>
 
 <h1>Que me pongo?</h1>
-<p>
-    <i>
-        <span id="cityName"></span>
-    </i>
-</p>
+<div class="col-12">
+    <p>
+        <i>
+            <span id="cityName"></span>
+        </i>
+    </p>
 
-<div class="spinner-border text-success" role="status" style="display: none;" id="loading">
-    <span class="sr-only">Loading...</span>
+    <p>
+        <small>Te recomendamos en base al estado del tiempo, temperatura y viento.</small>
+    </p>
 </div>
 
-<ul id="lista" class="list-group">
-</ul>
+
+<div class="col-12">
+    <div class="spinner-border text-success" role="status" style="display: none;" id="loading">
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    <ul id="lista" class="list-group">
+    </ul>
+</div>
+
 
 
 <!-- Optional JavaScript -->
@@ -159,16 +169,17 @@
                                 break;
                         }
 
-                        if (porHora[i].temperature <= 18) {
-                            respuesta.remera = true;
-                            respuesta.campera = true;
+                        if (porHora[i].temperature <= 17) {
+                            respuesta.remera = false;
+                            respuesta.campera = false;
                             respuesta.camperaAbrigo = true;
-                        } else if (porHora[i].temperature > 18 && porHora[i].temperature < 28) {
+                        } else if (porHora[i].temperature > 17 && porHora[i].temperature < 28) {
                             respuesta.remera = true;
                             respuesta.campera = false;
                             respuesta.camperaAbrigo = false;
                         } else if (porHora[i].temperature >= 28) {
                             respuesta.remera = true;
+                            respuesta.campera = false;
                             respuesta.camperaAbrigo = false;
                         }
 
@@ -177,18 +188,21 @@
                         recomendacion += ' ' + Math.round(porHora[i].temperature) + "°";
 
                         if (respuesta.paraguas) {
-                            recomendacion += "<img src='img/umbrella.png' height='50px'></img>";
+                            recomendacion += "<img src='img/umbrella.png' height='40px'></img>";
+                        }
+                        if (respuesta.remera) {
+                            recomendacion += "<img src='img/tshirt.png' height='40px'></img>";
                         }
                         if (respuesta.campera) {
-                            recomendacion += "<img src='img/jacket.png' height='50px'></img>";
+                            recomendacion += "<img src='img/jacket.png' height='40px'></img>";
                         } else if (respuesta.remera) {
-                            recomendacion += "<img src='img/tshirt.png' height='50px'></img>";
+                            recomendacion += "<img src='img/tshirt.png' height='40px'></img>";
                         }
                         if (respuesta.camperaAbrigo) {
-                            recomendacion += "<img src='img/warm-jacket.png' height='50px'></img>";
+                            recomendacion += "<img src='img/warm-jacket.png' height='40px' alt='campera'></img>";
                         }
                         if (porHora[i].windSpeed > 3.5) {
-                            recomendacion += '<img src=\'img/scarf.png\' height=\'50px\'></img>'
+                            recomendacion += '<img src=\'img/scarf.png\' height=\'20px\'></img>'
                         }
 
 
