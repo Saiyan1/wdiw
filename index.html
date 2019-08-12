@@ -75,7 +75,7 @@
                     var respuesta = {};
                     respuesta.paraguas = false;
 
-                    // console.log(response);
+                    console.log(response);
                     // console.log('Estado actual: ' + response.currently.summary);
                     // console.log('icon: ' + response.currently.icon);
                     // console.log('intensidad lluvia: ' + response.currently.precipIntensity);
@@ -158,16 +158,22 @@
                                 break;
                         }
 
-                        if (porHora[i].temperature <= 20) {
+                        if (porHora[i].temperature <= 18) {
                             respuesta.remera = true;
                             respuesta.campera = true;
-                        } else if (porHora[i].temperature > 20 && porHora[i].temperature < 28) {
+                            respuesta.camperaAbrigo = true;
+                        } else if (porHora[i].temperature > 18 && porHora[i].temperature < 28) {
                             respuesta.remera = true;
                             respuesta.campera = false;
+                            respuesta.camperaAbrigo = false;
                         } else if (porHora[i].temperature >= 28) {
                             respuesta.remera = true;
+                            respuesta.camperaAbrigo = false;
                         }
 
+
+                        recomendacion += "<img src='"+ respuesta.icon +"' height='30px'></img>";
+                        recomendacion += ' ' + Math.round(porHora[i].temperature) + "°";
 
                         if (respuesta.paraguas) {
                             recomendacion += "<img src='img/umbrella.png' height='50px'></img>";
@@ -177,13 +183,13 @@
                         } else if (respuesta.remera) {
                             recomendacion += "<img src='img/tshirt.png' height='50px'></img>";
                         }
+                        if (respuesta.camperaAbrigo) {
+                            recomendacion += "<img src='img/warm-jacket.png' height='50px'></img>";
+                        }
+                        if (porHora[i].windSpeed > 3.5) {
+                            recomendacion += '<img src=\'img/scarf.png\' height=\'50px\'></img>'
+                        }
 
-                        recomendacion += "<img src='"+ respuesta.icon +"' height='30px'></img>";
-                        // recomendacion += porHora[i].icon;
-
-                        // console.log(respuesta.icon);
-
-                        recomendacion += ' ' + Math.round(porHora[i].temperature) + "°";
 
                         $('#lista').append("<li class='list-group-item'>"+ recomendacion +"</li>")
                     }
