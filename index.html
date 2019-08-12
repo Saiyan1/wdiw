@@ -51,7 +51,8 @@
         }
 
         function error() {
-            output.innerHTML = "No pude determinar tu ubicación :(";
+            // output.innerHTML = "No pude determinar tu ubicación :(";
+            alert("No pude determinar tu ubicación :(");
         };
 
         function success(position) {
@@ -75,7 +76,7 @@
                     var respuesta = {};
                     respuesta.paraguas = false;
 
-                    console.log(response);
+                    // console.log(response);
                     // console.log('Estado actual: ' + response.currently.summary);
                     // console.log('icon: ' + response.currently.icon);
                     // console.log('intensidad lluvia: ' + response.currently.precipIntensity);
